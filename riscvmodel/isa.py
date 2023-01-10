@@ -346,7 +346,7 @@ class InstructionILType(InstructionIType, metaclass=ABCMeta):
                                         self.rs1)
 
 
-class InstructionISType(InstructionFunct3Type,InstructionFunct7Type, metaclass=ABCMeta):
+class InstructionISType(InstructionFunct3Type, metaclass=ABCMeta):
     """
     Similar to R-Type instruction specialization for shifts by immediate.
 

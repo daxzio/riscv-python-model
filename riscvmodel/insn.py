@@ -187,20 +187,20 @@ class InstructionANDI(InstructionIType):
         model.state.intreg[self.rd] = model.state.intreg[self.rs1] & self.imm
 
 
-@isa("slli", RV32I, opcode=0b0010011, funct3=0b001, funct7=0b0000000)
+@isa("slli", RV32I, opcode=0b0010011, funct3=0b001)
 class InstructionSLLI(InstructionISType):
     def execute(self, model: Model):
         model.state.intreg[self.rd] = model.state.intreg[self.rs1] << self.shamt
 
 
-@isa("srli", RV32I, opcode=0b0010011, funct3=0b101, funct7=0b0000000)
+@isa("srli", RV32I, opcode=0b0010011, funct3=0b101)
 class InstructionSRLI(InstructionISType):
     def execute(self, model: Model):
         model.state.intreg[self.rd] = model.state.intreg[self.rs1].unsigned() >> int(
             self.shamt)
 
 
-@isa("srai", RV32I, opcode=0b0010011, funct3=0b101, funct7=0b0100000)
+@isa("srai", RV32I, opcode=0b0010011, funct3=0b101)
 class InstructionSRAI(InstructionISType):
     def execute(self, model: Model):
         model.state.intreg[self.rd] = model.state.intreg[self.rs1] >> self.shamt
@@ -372,20 +372,20 @@ class InstructionCSRRC(InstructionIType):
         pass
 
 
-#@isa("csrrwi", RV32IZicsr, opcode=0b1110011, funct3=0b101)
-#class InstructionCSRRWI(Instruction):
+# @isa("csrrwi", RV32IZicsr, opcode=0b1110011, funct3=0b101)
+# class InstructionCSRRWI(InstructionIType):
 #    def execute(self, model: Model):
 #        pass
 
 
 #@isa("csrrsi", RV32IZicsr, opcode=0b1110011, funct3=0b110)
-#class InstructionCSRRSI(Instruction):
+#class InstructionCSRRSI(InstructionIType):
 #    def execute(self, model: Model):
 #        pass
 
 
 #@isa("csrrci", RV32IZicsr, opcode=0b1110011, funct3=0b111)
-#class InstructionCSRRCI(Instruction):
+#class InstructionCSRRCI(InstructionIType):
 #    def execute(self, model: Model):
 #        pass
 
