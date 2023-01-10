@@ -378,16 +378,16 @@ class InstructionCSRRWI(InstructionIType):
        pass
 
 
-#@isa("csrrsi", RV32IZicsr, opcode=0b1110011, funct3=0b110)
-#class InstructionCSRRSI(InstructionIType):
-#    def execute(self, model: Model):
-#        pass
+@isa("csrrsi", RV32IZicsr, opcode=0b1110011, funct3=0b110)
+class InstructionCSRRSI(InstructionIType):
+   def execute(self, model: Model):
+       pass
 
 
-#@isa("csrrci", RV32IZicsr, opcode=0b1110011, funct3=0b111)
-#class InstructionCSRRCI(InstructionIType):
-#    def execute(self, model: Model):
-#        pass
+@isa("csrrci", RV32IZicsr, opcode=0b1110011, funct3=0b111)
+class InstructionCSRRCI(InstructionIType):
+   def execute(self, model: Model):
+       pass
 
 
 @isa("lwu", RV64I, opcode=0b0000011, funct3=0b110)
