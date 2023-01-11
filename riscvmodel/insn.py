@@ -297,6 +297,12 @@ class InstructionFENCEI(InstructionIType):
     def execute(self, model: Model):
         pass
 
+@isa("fence.i", RV32IZicsr, opcode=0b0001111, funct3=0b001)
+class InstructionFENCEIX(InstructionIType):
+    def execute(self, model: Model):
+        pass
+
+
 
 @isa("ecall", RV32I, opcode=0b1110011, funct3=0b000, imm=0b000000000000, rd=0b00000, rs1=0b00000)
 class InstructionECALL(InstructionIType):
@@ -710,3 +716,38 @@ class InstructionAMOSWAP(InstructionAMOType):
         # Perform correct lock or release actions
         if self.rl: model.state.atomic_release(model.state.intreg[self.rs1])
         elif self.aq: model.state.atomic_acquire(model.state.intreg[self.rs1])
+
+# @isa("fmv.x.w", RV32IZicsr, opcode=0b1010011, funct3=0b000, funct7=0b1111000)
+# class InstructionFMV(InstructionRType):
+#     def execute(self, model: Model):        
+#         pass
+#         # FMV.X.W moves the single-precision value in floating-point register rs1 represented in IEEE 754-2008 encoding to the lower 32 bits of integer register rd. For RV64, the higher 32 bits of the destination register are filled with copies of the floating-point number’s sign bit
+#         # model.state.intreg[self.rd] = model.state.memory.lw(
+#         #     model.state.intreg[self.rs1].unsigned()
+#         # )
+    
+#     def __str__(self):
+#         return "{} ft{}, x{} // ft0, zero".format(self.mnemonic, self.rd, self.rs1)
+
+@isa("fmv.w.x", RV32IZicsr, opcode=0b1010011, funct3=0b000, funct7=0b1111000)
+class InstructionFMV(InstructionRType):
+    def execute(self, model: Model):        
+        pass
+        # FMV.W.X moves the single-precision value encoded in IEEE 754-2008 standard encoding from the lower 32 bits of integer register rs1 to the floating-point register rd. The bits are not modified in the transfer, and in particular, the payloads of non-canonical NaNs are preserved.
+        # model.state.intreg[self.rd] = model.state.memory.lw(
+        #     model.state.intreg[self.rs1].unsigned()
+        # )
+    
+    def __str__(self):
+        #return "{} ft{}, x{} // ft0, zero".format(self.mnemonic, self.rd, self.rs1)
+        return "{} ft{}, x{}".format(self.mnemonic, self.rd, self.rs1)
+
+@isa("fsw", RV32IZicsr, opcode=0b0100111, funct3=0b010)
+class InstructionFSW(InstructionSType):
+    def execute(self, model: Model):        
+        model.state.memory.sw((model.state.intreg[self.rs1] + self.imm).unsigned(),
+                        model.state.intreg[self.rs2])
+    
+    def __str__(self):
+        return "{} x{}, {}(x{})".format(self.mnemonic, self.rs2, self.imm,
+                                        self.rs1)
