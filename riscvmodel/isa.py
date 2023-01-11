@@ -268,6 +268,57 @@ class InstructionRType(InstructionFunct3Type, InstructionFunct7Type, metaclass=A
         return "{} x{}, x{}, x{}".format(self.mnemonic, self.rd, self.rs1,
                                          self.rs2)
 
+class InstructionXType(InstructionFunct3Type, InstructionFunct7Type, metaclass=ABCMeta):
+    """
+    R-type instructions are 3-register instructions which use two source
+    registers and write one output register.
+
+    :param rd: Destination register
+    :type rd: int
+    :param rs1: Source register 1
+    :type rs1: int
+    :param rs2: Source register 2
+    :type rs2: int
+    """
+
+    isa_format_id = "R"
+    asm_arg_signature = "<rd>, <rs1>, <rs2>"
+
+    field_rd = Field(name="rd", base=7, size=5, description="")
+    field_rs1 = Field(name="rs1", base=15, size=5, description="")
+    field_rs2 = Field(name="rs2", base=20, size=5, description="")
+
+    def __init__(self, rd: int = None, rs1: int = None, rs2: int = None):
+        super(InstructionXType, self).__init__()
+        # pylint: disable=C0103
+        self.rd = rd
+        self.rs1 = rs1
+        self.rs2 = rs2
+
+    def ops_from_list(self, ops):
+        (self.rd, self.rs1, self.rs2) = [int(op[1:]) for op in ops]
+
+    def randomize(self, variant: Variant):
+        self.rd = randrange(0, variant.xlen)
+        self.rs1 = randrange(0, variant.xlen)
+        self.rs2 = randrange(0, variant.xlen)
+
+    def inopstr(self, model):
+        opstr = "{:>3}={}, ".format("x{}".format(self.rs1),
+                                    model.state.intreg[self.rs1])
+        opstr += "{:>3}={} ".format("x{}".format(self.rs2),
+                                    model.state.intreg[self.rs2])
+        return opstr
+
+    def outopstr(self, model):
+        return "{:>3}={} ".format("x{}".format(self.rd),
+                                  model.state.intreg[self.rd])
+
+    def __str__(self):
+        # return "{} x{}, x{}, x{}".format(self.mnemonic, self.rd, self.rs1,
+        #                                  self.rs2)
+        return "{} x{}, x{}  ft0, zero".format(self.mnemonic, self.rd, self.rs1)
+
 
 class InstructionIType(InstructionFunct3Type, metaclass=ABCMeta):
     """
